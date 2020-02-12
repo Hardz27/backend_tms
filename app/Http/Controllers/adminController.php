@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 
 use App\M_User;
@@ -22,8 +24,6 @@ class adminController extends Controller
     // //
 
     public function register(Request $request){
-
-      dd($request);
         $data = new M_User();
         $data->nm_jobseeker = $request->input('name');
         $data->email_jobseeker = $request->input('email');
@@ -51,6 +51,38 @@ class adminController extends Controller
 
     public function login(Request $request){
         $data = M_User::where('email_jobseeker',$request->email)->where('password_jobseeker',$request->password)->first();
+        // dd($data);
+
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
+
+    public function uploadCV(Request $request){
+      // $request->file('cv')->getClientOriginalName()
+      // getRealPath()
+      // getClientOriginalExtension()
+      // dd($request->file('cv')->move('public', 'coba.pdf'));
+
+        $id_cv = DB::table('cv_jobseeker')->insertGetId(
+                  array('file_cv_jobseeker' => $request->input('name').'.pdf')
+                );
+
+        $request->file('cv')->move('public', $request->input('name').'.pdf');
+
+        $data = M_User::where('id_jobseeker', $request->input('idUser'))->first();
+        $data->id_cv_jobseeker = $id_cv;
+        $data->save();
         // dd($data);
 
         if ($data) {
