@@ -22,10 +22,12 @@ class adminController extends Controller
     // //
 
     public function register(Request $request){
+
+      dd($request);
         $data = new M_User();
         $data->nm_jobseeker = $request->input('name');
         $data->email_jobseeker = $request->input('email');
-        $data->password_jobseeker = $request->input('phone');
+        $data->password_jobseeker = $request->input('password');
         $data->alamat_jobseeker = $request->input('address');
         $data->no_hp_jobseeker = $request->input('phone');
         $data->tgl_lahir_jobseeker = $request->input('born_date');
