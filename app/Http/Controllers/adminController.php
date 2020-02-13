@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\M_User;
+use App\T_kategori_soal;
+use PDF;
 
 class adminController extends Controller
 {
@@ -22,6 +24,11 @@ class adminController extends Controller
     // }
 
     // //
+
+    public function test(Request $request)
+    {
+        dd($request);
+    }
 
     public function register(Request $request){
         $data = new M_User();
@@ -78,7 +85,7 @@ class adminController extends Controller
                   array('file_cv_jobseeker' => $request->input('name').'.pdf')
                 );
 
-        $request->file('cv')->move('public', $request->input('name').'.pdf');
+        $request->file('cv')->move('tms.test/public', $request->input('name').'.pdf');
 
         $data = M_User::where('id_jobseeker', $request->input('idUser'))->first();
         $data->id_cv_jobseeker = $id_cv;
@@ -100,228 +107,231 @@ class adminController extends Controller
         }
     }
 
-    // public function barang(){
-    //     $data = M_Barang::all();
+    public function skillCategory(Request $request){
+      
+        $kategori = T_kategori_soal::orderBy('tag_soal')->get();
+        // dd("ouyy");
 
-    //     if ($data) {
-    //       return response()->json([
-    //           'success' => true,
-    //           'message' => 'data ditemukan',
-    //           'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak ditemukan',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
 
-    // public function addbarang(Request $request){
-    //     $data = new M_Barang();
-    //     $data->kode_barang = $request->input('kode_barang');
-    //     $data->jenis_barang = $request->input('jenis_barang');
-    //     $data->icon = $request->input('icon');
-    //     $data->save();
+        $data_jobseeker = M_User::where('id_jobseeker', $request->input('idUser'))->first();
 
-    //     if ($data) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'data disimpan',
-    //             'data' => $data
-    //         ], 200);
-    //       } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'data tidak disimpan',
-    //             'data' => ''
-    //         ], 404);
-    //       }
-    // }
+        // $ujian = DB::table('kompetensi')->where('id_jobseeker',$id_jobseeker)->get();
 
-    // public function updatebarang(Request $request, $id){
-    //     $data = M_Barang::where('id_barang', $id)->first();
-    //     $data->kode_barang = $request->input('kode_barang');
-    //     $data->jenis_barang = $request->input('jenis_barang');
-    //     $data->icon = $request->input('icon');
-    //     $data->save();
+        foreach ($kategori as $key) {
+            $ujian = DB::table('kompetensi')
+                    ->where('id_jobseeker',$data_jobseeker->id_jobseeker)
+                    ->where('id_kategori_soal',$key->id_kategori_soal)
+                    ->first();
 
-    //     if ($data) {
-    //       return response()->json([
-    //         'success' => true,
-    //         'message' => 'data diupdate',
-    //         'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //         'success' => false,
-    //         'message' => 'data tidak diupdate',
-    //         'data' => ''
-    //       ], 404);
-    //     }
-    // }
+            if ($ujian) {
+                $data[] = [
+                    'nama' => $key->tag_soal,
+                    'idSkill' => $key->id_kategori_soal,
+                    'skor' => $ujian->skor
+                ];
+            }else{
+                $data[] = [
+                    'nama' => $key->tag_soal,
+                    'idSkill' => $key->id_kategori_soal,
+                    'skor' => 'null'
+                ];
+            }
 
-    // public function deletebarang(Request $request, $id){
-    //     $data = M_Barang::where('id_barang', $id)->first();
-    //     $data->delete();
-    //     if ($data) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'data dihapus',
-    //             'data' => $data
-    //         ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak dihapus',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
+        }
 
-    // public function addestimasi(Request $request){
-    //     $data = new M_Estimasi();
-    //     $data->kode_barang = $request->input('kode_barang');
-    //     $data->est_kerusakan = $request->input('est_kerusakan');
-    //     $data->harga = $request->input('harga');
-    //     $data->jenis_barang = $request->input('jenis_barang');
-    //     $data->save();
 
-    //     if ($data) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'data disimpan',
-    //             'data' => $data
-    //         ], 200);
-    //       } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'data tidak disimpan',
-    //             'data' => ''
-    //         ], 404);
-    //       }
-    // }
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
 
-    // public function updateestimasi(Request $request, $id){
-    //     $data = M_Estimasi::where('id_estimasi', $id)->first();
-    //     $data->kode_barang = $request->input('kode_barang');
-    //     $data->est_kerusakan = $request->input('est_kerusakan');
-    //     $data->harga = $request->input('harga');
-    //     $data->jenis_barang = $request->input('jenis_barang');
-    //     $data->save();
+    public function soal(Request $request){
 
-    //     if ($data) {
-    //       return response()->json([
-    //         'success' => true,
-    //         'message' => 'data diupdate',
-    //         'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //         'success' => false,
-    //         'message' => 'data tidak diupdate',
-    //         'data' => ''
-    //       ], 404);
-    //     }
-    // }
+        $soals = DB::table('soal')
+                ->join('kategori_soal', 'soal.id_kategori_soal','=','kategori_soal.id_kategori_soal')
+                ->where('soal.id_kategori_soal', $request->input('idSkill'))->get();
 
-    // public function deleteestimasi(Request $request, $id){
-    //     $data = M_Estimasi::where('id_estimasi', $id)->first();
-    //     $data->delete();
-    //     if ($data) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'data dihapus',
-    //             'data' => $data
-    //         ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak dihapus',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
-    
-    // public function estimasi(){
-    //     $data = M_Estimasi::all();
+        foreach ($soals as $soal) {
+            $jawabans = DB::table('jawaban')->where('id_soal', $soal->id_soal)->get();
+            $jawaban_soal = array();
+            foreach ($jawabans as $jawaban) {
+                $jawaban_soal[] = [
+                    'id_jawaban' => $jawaban->id_jawaban,
+                    'nama' => $jawaban->jawaban
+                ];
+            }
 
-    //     if ($data) {
-    //       return response()->json([
-    //           'success' => true,
-    //           'message' => 'data ditemukan',
-    //           'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak ditemukan',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
+            $soal_col[] = [
+                'id_soal' => $soal->id_soal,
+                'pertanyaan' => $soal->soal,
+                'jawaban' => $jawaban_soal
+            ];            
+        }
 
-    // public function tipeestimasi($kode_barang){
-    //     $data = M_Estimasi::where('kode_barang', $kode_barang)->get();
+        $data[] = [
+                'skill' => $soals[0]->tag_soal,
+                'soal' => $soal_col
+            ];
 
-    //     if ($data) {
-    //       return response()->json([
-    //           'success' => true,
-    //           'message' => 'data ditemukan',
-    //           'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak ditemukan',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
+        // dd($data);
+      
 
-    // public function daftarteknisi(Request $request){
-    //     $data = new M_Teknisi();
-    //     $data->t_nama = $request->input('t_nama');
-    //     $data->t_email = $request->input('t_email');
-    //     $data->t_alamat = $request->input('t_alamat');
-    //     $data->t_hp = $request->input('t_hp');
-    //     $data->t_keahlian = $request->input('t_keahlian');
-    //     $data->t_ktp = $request->input('t_ktp');
-    //     $data->t_selfi = $request->input('t_selfi');
-    //     $data->save();
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
 
-    //     if ($data) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'data disimpan',
-    //             'data' => $data
-    //         ], 200);
-    //       } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'data tidak disimpan',
-    //             'data' => ''
-    //         ], 404);
-    //       }
-    // }
+    public function submit(Request $request){
 
-    // public function teknisi(){
-    //   $data = M_Teknisi::all();
+        $soals = DB::table('soal')
+                ->join('kunci_jawaban', 'soal.id_soal','=','kunci_jawaban.id_soal')
+                ->join('kategori_soal', 'soal.id_kategori_soal','=','kategori_soal.id_kategori_soal')
+                ->select('soal.*', 'kategori_soal.tag_soal' ,'kunci_jawaban.jawaban_id_jawaban')
+                ->where('soal.id_kategori_soal', $request->input('idSkill'))->get();
 
-    //     if ($data) {
-    //       return response()->json([
-    //           'success' => true,
-    //           'message' => 'data ditemukan',
-    //           'data' => $data
-    //       ], 200);
-    //     } else {
-    //       return response()->json([
-    //           'success' => false,
-    //           'message' => 'data tidak ditemukan',
-    //           'data' => ''
-    //       ], 404);
-    //     }
-    // }
+        $jawaban = $request->input('jawaban');
+
+        $salah = 0;
+        $benar = 0;
+        $i = 0;
+
+        foreach ($soals as $iterate) {
+
+            if ($i > sizeof($jawaban)-1) {
+                $salah++;
+            }else{
+                $soal = DB::table('soal')
+                    ->join('kunci_jawaban', 'soal.id_soal','=','kunci_jawaban.id_soal')
+                    ->select('soal.*', 'kunci_jawaban.jawaban_id_jawaban')
+                    ->where('soal.id_soal', $jawaban[$i]['id_soal'])->first();
+
+                if ($soal->jawaban_id_jawaban == $jawaban[$i]['id_jawaban']) {
+                    $benar++;
+                }else{
+                    $salah++;
+                }
+            }
+
+            $i++;
+        }
+
+        $nilai = ($benar/sizeof($soals)) * 100;
+        $nilai = number_format($nilai,2);
+
+        $data = [
+            'skor' => $nilai,
+            'skill' => $soals[0]->tag_soal
+        ];
+
+        // dd($benar, $salah);
+
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
+
+    public function seen(Request $request){
+
+        $penyaluran = DB::table('penyaluran')
+                            ->join('perusahaan', 'penyaluran.id_perusahaan','=','perusahaan.id_perusahaan')
+                            ->join('loker', 'penyaluran.id_loker','=','loker.id_loker')
+                            ->where('penyaluran.id_jobseeker', $request->input('idUser'))
+                            ->get();
+
+        foreach ($penyaluran as $key) {
+            $data[] = [
+                'namaPerusahaan' => $key->nm_perusahaan,
+                'alamat' => $key->alamat_perusahaan,
+                'loker' => $key->judul_loker. ' - ' .$key->deskripsi_loker
+            ];
+        }
+
+        // dd($penyaluran);
+        
+
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
+
+    public function hired(Request $request){
+
+        $data_jobseeker = DB::table('jobseeker')
+                        ->join('perusahaan','jobseeker.id_perusahaan','=','perusahaan.id_perusahaan')
+                        ->where('jobseeker.id_jobseeker', $request->input('idUser'))
+                        ->select('perusahaan.nm_perusahaan','perusahaan.alamat_perusahaan','perusahaan.no_hp_perusahaan')
+                        ->first();
+
+        $data = [
+            'namaPerusahaan' => $data_jobseeker->nm_perusahaan,
+            'alamat' => $data_jobseeker->alamat_perusahaan,
+            'contact' => $data_jobseeker->no_hp_perusahaan,
+            'suratPenerimaan' => 'dummy dulu'
+        ];
+        
+
+        if ($data) {
+          return response()->json([
+              'success' => true,
+              'message' => 'data ditemukan',
+              'data' => $data
+          ], 200);
+        } else {
+          return response()->json([
+              'success' => false,
+              'message' => 'data tidak ditemukan',
+              'data' => ''
+          ], 404);
+        }
+    }
+
+
+
+    public function downloadPDF() {
+        $show = DB::table('jobseeker')->get();
+        $pdf = PDF::loadView('pdf', compact('show'));
+        
+        return $pdf->download('pdf.pdf');
+    }
 
 }

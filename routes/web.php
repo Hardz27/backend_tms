@@ -15,7 +15,18 @@
 //     return $router->app->version();
 // });
 
+$router->post('/test', 'adminController@test');
+
 $router->post('/register', 'adminController@register');
 $router->post('/login', 'adminController@login');
 
 $router->post('/uploadCV', 'adminController@uploadCV');
+$router->post('/skillCategory', 'adminController@skillCategory');
+
+$router->post('/soal', 'adminController@soal');
+$router->post('/submitExam', 'adminController@submit');
+
+$router->post('/seen', 'adminController@seen');
+$router->post('/hired', 'adminController@hired');
+
+$router->post('/pdf', 'adminController@downloadPDF');
