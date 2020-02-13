@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2020 at 01:55 PM
+-- Generation Time: Feb 13, 2020 at 06:53 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.19
 
@@ -59,7 +59,9 @@ CREATE TABLE `cv_jobseeker` (
 INSERT INTO `cv_jobseeker` (`id_cv_jobseeker`, `file_cv_jobseeker`) VALUES
 (2, 'CV_Hilmi_Aan_Putra.pdf'),
 (4, 'Hardiansyah Maulana.pdf'),
-(5, 'Sofyan Maulana.pdf');
+(5, 'Sofyan Maulana.pdf'),
+(6, 'Hardiansyah Maulana.pdf'),
+(7, 'Hilmi Aan.pdf');
 
 -- --------------------------------------------------------
 
@@ -132,7 +134,7 @@ CREATE TABLE `jobseeker` (
 --
 
 INSERT INTO `jobseeker` (`id_jobseeker`, `nm_jobseeker`, `email_jobseeker`, `password_jobseeker`, `tgl_lahir_jobseeker`, `jk_jobseeker`, `alamat_jobseeker`, `no_hp_jobseeker`, `id_cv_jobseeker`, `images`, `id_perusahaan`) VALUES
-(1, 'Hilmi Aan Putra', 'hilmi@gmail.com', 'hilmi275', '12-12-1998', 'Pria', 'cari ajalah sendiir, lupa ding', '089999888777', 2, NULL, NULL),
+(1, 'Hilmi Aan Putra', 'hilmi@gmail.com', 'hilmi275', '12-12-1998', 'Pria', 'cari ajalah sendiir, lupa ding', '089999888777', 7, NULL, NULL),
 (2, 'Sofyan Maulana', 'maulana27051998@gmail.com', 'hardianz7', '22-02-1994', 'Pria', 'Balongan', '0895334623006', 5, NULL, 1),
 (4, 'Hardiansyah Maulana', 'hardz@gmail.com', 'hardianz7', '12-12-1992', 'Pria', 'Balunjan', '089999999999', 4, NULL, NULL);
 
@@ -454,7 +456,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cv_jobseeker`
 --
 ALTER TABLE `cv_jobseeker`
-  MODIFY `id_cv_jobseeker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_cv_jobseeker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jawaban`
