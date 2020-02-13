@@ -299,7 +299,7 @@ class adminController extends Controller
         $data_jobseeker = DB::table('jobseeker')
                         ->join('perusahaan','jobseeker.id_perusahaan','=','perusahaan.id_perusahaan')
                         ->where('jobseeker.id_jobseeker', $request->input('idUser'))
-                        ->select('perusahaan.nm_perusahaan','perusahaan.alamat_perusahaan','perusahaan.no_hp_perusahaan')
+                        ->select('jobseeker.id_jobseeker', 'perusahaan.nm_perusahaan','perusahaan.alamat_perusahaan','perusahaan.no_hp_perusahaan')
                         ->first();
 
         $data = [
