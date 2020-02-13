@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\M_User;
 use App\T_kategori_soal;
-use PDF;
+use PDF; 
 
 class adminController extends Controller
 {
@@ -306,7 +306,7 @@ class adminController extends Controller
             'namaPerusahaan' => $data_jobseeker->nm_perusahaan,
             'alamat' => $data_jobseeker->alamat_perusahaan,
             'contact' => $data_jobseeker->no_hp_perusahaan,
-            'suratPenerimaan' => 'dummy dulu'
+            'suratPenerimaan' => 'localhost:8000/pdf/'.$data_jobseeker->id_jobseeker
         ];
         
 
@@ -327,11 +327,137 @@ class adminController extends Controller
 
 
 
-    public function downloadPDF() {
-        $show = DB::table('jobseeker')->get();
-        $pdf = PDF::loadView('pdf', compact('show'));
+    public function downloadPDF($id) {
+
+        $jobseeker = DB::table('jobseeker')->join('perusahaan','jobseeker.id_perusahaan','=','perusahaan.id_perusahaan')
+                        ->where('jobseeker.id_jobseeker',$id)
+                        ->first();
+
+        // dd($jobseeker);
+
+        PDF::SetCreator('PDF_CREATOR');
+        PDF::SetAuthor('Nicola Asuni');
+        PDF::SetTitle('TCPDF Example 006');
+        PDF::SetSubject('TCPDF Tutorial');
+        PDF::SetKeywords('TCPDF, PDF, example, test, guide');
+
+        // set default header data
+        PDF::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 006', PDF_HEADER_STRING);
+
+        // set header and footer fonts
+        PDF::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        PDF::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        PDF::SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        PDF::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        PDF::SetHeaderMargin(PDF_MARGIN_HEADER);
+        PDF::SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        PDF::setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            PDF::setLanguageArray($l);
+        }
+
+        // ---------------------------------------------------------
+
+        // set font
+        PDF::SetFont('dejavusans', '', 10);
+
+        // add a page
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Print a table
+
+        // add a page
+        PDF::AddPage();
+
+        // <img src="images/Untitled.png" width="64" height="64" />
+
+        $textcolors = '
+        <font face="times"><span style="font-size: xx-large;">Talent Management Systems</span></font>
+        <br><br>
+        <hr />';
+        PDF::writeHTML($textcolors, true, false, true, false, '');
+
+        PDF::Image('images/Untitled.png', 180, 20, 16, '', '', '', '', false, 300);
+
+
+        // create some HTML content
+
+        $html = '
+        <div style="text-align:center">
+            <font face="times"><span style="font-size: xx-large;">'.$jobseeker->nm_perusahaan.'</span></font>
+            <br><br>
+            <font face="times">'.$jobseeker->alamat_perusahaan.'</font>
+        </div>
+
+        <p style="text-align:right"> Indramayu,'.date('d-M-Y').'</p>
+        <font face="times" size="12">
+            Kode : '.$jobseeker->nm_jobseeker.'/'.$jobseeker->id_perusahaan.'/'.date('d-m-Y').'<br>
+            Lampiran : - <br>
+            Perihal : Pemberitahuan Penerimaan Pekerjaan<br><br>
+
+            Yth. Bapak/Ibu/Saudara
+            <dd>di '.$jobseeker->alamat_jobseeker.'</dd>
+            <br>
+            <br>
+            Dengan Hormat,<br>
+            Kami mengucapkan terima kasih atas kepercayaan Saudara kepada Perusahan Penyaluran Pekerjaan kami. Kami telah menerima dan mengirimkan surat lamaran pekerjaan yang Saudara kirimkan pada web kami, dan sekarang telah ada perusahaan yang menginginkan anda untuk bergabung dengan mereka<br><br>
+
+            Untuk itu, kami mengundang Saudara untuk mengikuti wawancara internal sistem kami yang akan diselenggarakan pada<br>
+            <dd>
+            Hari        : '.date('D', strtotime(date('d-M-Y').' +3 day')).', '.date('d-M-Y', strtotime(date('d-M-Y').' +3 day')).'<br>
+            Tempat   : Gedung TI Lt. 2, Polindra, Indramayu<br>
+            Waktu     : Pukul 09.00 WIB – selesai</dd><br><br>
+
+            Dengan Ketentuan
+            <dd>
+            -Membawa berkas Data Diri lengkap beserta CV<br>
+            -Memakai Pakaian Formal, Rapih<br>
+            </dd><br>
+            Atas perhatian Saudari, kami mengucapkan terima kasih.
+        <br>
+        <br>
+        </font>
+        <div style="text-align:right">
+            <font face="times">
+                <span style="font-size: x-large;">Hormat kami,</span>
+                <br>
+                HRD Perusahaan
+                <br><br><br><br>
+                '.$jobseeker->nm_hrd_perusahaan.'
+            </font>
+        </div>
+
+
+
+
+
+
+        ';
+
+        // output the HTML content
+        PDF::writeHTML($html, true, false, true, false, '');
+
+        // Print some HTML Cells
+
         
-        return $pdf->download('pdf.pdf');
+        // reset pointer to the last page
+        PDF::lastPage();
+
+        //Close and output PDF document
+        PDF::Output('example_006.pdf', 'I');
+        
+          
     }
 
 }

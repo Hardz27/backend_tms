@@ -81,8 +81,11 @@ $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(\Barryvdh\DomPDF\ServiceProvider::class);
 
-class_alias('\Barryvdh\DomPDF\ServiceProvider', 'PDF');
-$app->configure('dompdf');
+$app->register(Elibyy\TCPDF\ServiceProvider::class);
+class_alias(Elibyy\TCPDF\Facades\TCPDF::class, 'PDF');
+
+// class_alias('\Barryvdh\DomPDF\ServiceProvider', 'PDF');
+// $app->configure('dompdf');
 
 /*
 |--------------------------------------------------------------------------

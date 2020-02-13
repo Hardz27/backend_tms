@@ -29,4 +29,4 @@ $router->post('/submitExam', 'adminController@submit');
 $router->post('/seen', 'adminController@seen');
 $router->post('/hired', 'adminController@hired');
 
-$router->post('/pdf', 'adminController@downloadPDF');
+$router->get('/pdf/{id}', 'adminController@downloadPDF');
