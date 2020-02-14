@@ -8,6 +8,7 @@
         "php": "^7.2",
         "barryvdh/laravel-dompdf": "^0.8.5",
         "elibyy/tcpdf-laravel": "^6.0",
+        "goodnesskay/laravelpdfviewer": "^1.0",
         "laravel/lumen-framework": "^6.0"
     },
     "require-dev": {
