@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 13, 2020 at 06:53 PM
+-- Generation Time: Feb 15, 2020 at 12:23 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.19
 
@@ -107,7 +107,11 @@ INSERT INTO `jawaban` (`id_jawaban`, `jawaban`, `id_soal`) VALUES
 (50, '5.4', 20),
 (51, '6.0', 20),
 (52, '5.8', 20),
-(53, '5.6', 20);
+(53, '5.6', 20),
+(54, 'Model View Controller', 21),
+(55, 'Model Viva Contoh', 21),
+(56, 'Miu Value Code', 21),
+(57, 'Margin interVal Correction', 21);
 
 -- --------------------------------------------------------
 
@@ -172,7 +176,7 @@ CREATE TABLE `kompetensi` (
   `id_kompetensi` int(11) NOT NULL,
   `id_jobseeker` int(11) DEFAULT NULL,
   `id_kategori_soal` int(11) NOT NULL,
-  `skor` varchar(3) DEFAULT NULL,
+  `skor` varchar(5) DEFAULT NULL,
   `id_kebutuhan_skill` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -188,7 +192,8 @@ INSERT INTO `kompetensi` (`id_kompetensi`, `id_jobseeker`, `id_kategori_soal`, `
 (5, NULL, 3, NULL, 1),
 (6, NULL, 3, NULL, 2),
 (7, NULL, 3, NULL, 3),
-(11, 2, 3, '100', NULL);
+(11, 2, 3, '100', NULL),
+(13, 4, 1, '50.00', NULL);
 
 -- --------------------------------------------------------
 
@@ -213,7 +218,8 @@ INSERT INTO `kunci_jawaban` (`id_kunci_jawaban`, `id_soal`, `jawaban_id_jawaban`
 (7, 17, 41),
 (8, 19, 46),
 (9, 18, 43),
-(10, 20, 51);
+(10, 20, 51),
+(11, 21, 54);
 
 -- --------------------------------------------------------
 
@@ -300,7 +306,9 @@ INSERT INTO `penyaluran` (`id_penyaluran`, `id_jobseeker`, `id_perusahaan`, `id_
 (6, 2, 1, 1, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
 (7, 2, 1, 2, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
 (8, 2, 2, 3, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
-(9, 1, 1, 1, 'Dikirim', 'Laravel', '2020-02-11 00:47:07', '2020-02-11 00:47:07');
+(9, 1, 1, 1, 'Dikirim', 'Laravel', '2020-02-09 00:47:07', '2020-02-11 00:47:07'),
+(10, 1, 1, 1, 'Dikirim', 'Laravel', '2020-02-14 06:16:50', '2020-02-14 06:16:50'),
+(11, 1, 1, 1, 'Dikirim', 'Code Igniter', '2020-02-14 06:16:50', '2020-02-14 06:16:50');
 
 -- --------------------------------------------------------
 
@@ -350,7 +358,8 @@ INSERT INTO `soal` (`id_soal`, `soal`, `id_kategori_soal`) VALUES
 (17, 'Pertanyaan tentang RN', 3),
 (18, 'Code Igniter merupakan..', 2),
 (19, 'FLutter termasuk framework berbahasa?', 4),
-(20, 'Laravel Versi terbaru adalah', 1);
+(20, 'Laravel Versi terbaru adalah', 1),
+(21, 'MVC adalah ?', 1);
 
 --
 -- Indexes for dumped tables
@@ -462,7 +471,7 @@ ALTER TABLE `cv_jobseeker`
 -- AUTO_INCREMENT for table `jawaban`
 --
 ALTER TABLE `jawaban`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `jobseeker`
@@ -480,13 +489,13 @@ ALTER TABLE `kategori_soal`
 -- AUTO_INCREMENT for table `kompetensi`
 --
 ALTER TABLE `kompetensi`
-  MODIFY `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `kunci_jawaban`
 --
 ALTER TABLE `kunci_jawaban`
-  MODIFY `id_kunci_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_kunci_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `loker`
@@ -504,7 +513,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `penyaluran`
 --
 ALTER TABLE `penyaluran`
-  MODIFY `id_penyaluran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_penyaluran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `perusahaan`
@@ -516,7 +525,7 @@ ALTER TABLE `perusahaan`
 -- AUTO_INCREMENT for table `soal`
 --
 ALTER TABLE `soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables

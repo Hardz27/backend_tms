@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\M_User;
+use App\M_Kompetensi;
 use App\T_kategori_soal;
 use PDF; 
 
@@ -243,7 +244,15 @@ class adminController extends Controller
             'skill' => $soals[0]->tag_soal
         ];
 
+
+
         // dd($benar, $salah);
+
+        $kompetensi = new M_Kompetensi();
+        $kompetensi->id_jobseeker = $request->input('userId');
+        $kompetensi->id_kategori_soal = $request->input('idSkill');
+        $kompetensi->skor = $nilai;
+        $kompetensi->save();
 
         if ($data) {
           return response()->json([
