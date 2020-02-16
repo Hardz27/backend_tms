@@ -85,13 +85,16 @@ class adminController extends Controller
       // getClientOriginalExtension()
       // dd($request->file('cv')->move('public', 'coba.pdf'));
 
+       $data = M_User::where('id_jobseeker', $request->input('idUser'))->first();
+       // dd($data->nm_jobseeker);
+
         $id_cv = DB::table('cv_jobseeker')->insertGetId(
-                  array('file_cv_jobseeker' => $request->input('name').'.pdf')
+                  array('file_cv_jobseeker' => $data->nm_jobseeker.'.pdf')
                 );
+        // dd($id_cv, $data->nm_jobseeker.'.pdf');
+        $request->file('cv')->move('public', $data->nm_jobseeker.'.pdf');
 
-        $request->file('cv')->move('public', $request->input('name').'.pdf');
-
-        $data = M_User::where('id_jobseeker', $request->input('idUser'))->first();
+        
         $data->id_cv_jobseeker = $id_cv;
         $data->save();
         // dd($data);
