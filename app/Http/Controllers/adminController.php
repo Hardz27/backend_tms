@@ -43,7 +43,7 @@ class adminController extends Controller
         $data->id_cv_jobseeker = null;
         $data->save();
 
-        dd($data);
+        // dd($data);
 
         if ($data) {
             return response()->json([
@@ -89,7 +89,7 @@ class adminController extends Controller
                   array('file_cv_jobseeker' => $request->input('name').'.pdf')
                 );
 
-        $request->file('cv')->move('tms.test/public', $request->input('name').'.pdf');
+        $request->file('cv')->move('public', $request->input('name').'.pdf');
 
         $data = M_User::where('id_jobseeker', $request->input('idUser'))->first();
         $data->id_cv_jobseeker = $id_cv;
