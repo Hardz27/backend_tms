@@ -40,7 +40,10 @@ class adminController extends Controller
         $data->no_hp_jobseeker = $request->input('phone');
         $data->tgl_lahir_jobseeker = $request->input('born_date');
         $data->jk_jobseeker = $request->input('gender');
+        $data->id_cv_jobseeker = null;
         $data->save();
+
+        dd($data);
 
         if ($data) {
             return response()->json([
@@ -212,6 +215,8 @@ class adminController extends Controller
 
         $jawaban = $request->input('jawaban');
 
+        // dd($request);
+
         $salah = 0;
         $benar = 0;
         $i = 0;
@@ -258,7 +263,7 @@ class adminController extends Controller
           return response()->json([
               'success' => true,
               'message' => 'data ditemukan',
-              'data' => $data
+              'data' => $kompetensi
           ], 200);
         } else {
           return response()->json([
@@ -464,7 +469,21 @@ class adminController extends Controller
         PDF::lastPage();
 
         //Close and output PDF document
-        PDF::Output('example_006.pdf', 'I');
+        // $path_Fix = '';
+        // $path = __DIR__;
+        // $path = explode('\\', $path);
+        // $lastpath = sizeof($path);
+        // for ($i=$lastpath - 3; $i < $lastpath; $i++) { 
+        //   $path[$i] = '';
+        // }
+        // for ($i=0; $i < $lastpath - 3; $i++) { 
+        //   $path_Fix .= $path[$i].'\\';
+        // }
+        // $path_Fix .= 'public\\pdf_mail\\';
+        // // dd($path_Fix);
+
+        // PDF::Output($path_Fix.'/Surat_keterangan.pdf', 'F');
+        PDF::Output('Surat_keterangan.pdf', 'I');
         
           
     }

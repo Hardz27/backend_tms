@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 15, 2020 at 12:23 PM
+-- Generation Time: Feb 16, 2020 at 02:11 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.19
 
@@ -30,16 +30,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id_admin` int(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `nm_admin` varchar(20) NOT NULL,
-  `no_hp_admin` varchar(14) NOT NULL
+  `no_hp_admin` varchar(14) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id_admin`, `nm_admin`, `no_hp_admin`) VALUES
-(1, 'Sofyan Maulana', '0895334623006');
+INSERT INTO `admin` (`id_admin`, `email`, `password`, `nm_admin`, `no_hp_admin`, `remember_token`) VALUES
+(2, 'admin@tms.com', '$2y$10$yrD417VSo/aezH4WAC4YFOx6Vgrne8ypqVIZr/3XWxUFPldeZBcK.', 'Admin1', '0899992332', NULL);
 
 -- --------------------------------------------------------
 
@@ -140,7 +143,8 @@ CREATE TABLE `jobseeker` (
 INSERT INTO `jobseeker` (`id_jobseeker`, `nm_jobseeker`, `email_jobseeker`, `password_jobseeker`, `tgl_lahir_jobseeker`, `jk_jobseeker`, `alamat_jobseeker`, `no_hp_jobseeker`, `id_cv_jobseeker`, `images`, `id_perusahaan`) VALUES
 (1, 'Hilmi Aan Putra', 'hilmi@gmail.com', 'hilmi275', '12-12-1998', 'Pria', 'cari ajalah sendiir, lupa ding', '089999888777', 7, NULL, NULL),
 (2, 'Sofyan Maulana', 'maulana27051998@gmail.com', 'hardianz7', '22-02-1994', 'Pria', 'Balongan', '0895334623006', 5, NULL, 1),
-(4, 'Hardiansyah Maulana', 'hardz@gmail.com', 'hardianz7', '12-12-1992', 'Pria', 'Balunjan', '089999999999', 4, NULL, NULL);
+(4, 'Hardiansyah Maulana', 'hardz@gmail.com', 'hardianz7', '12-12-1992', 'Pria', 'Balunjan', '089999999999', 4, NULL, NULL),
+(5, 'Userx', 'userx@gmail.com', 'hardianz7', '12-12-1990', 'Pria', 'Papua New Guinea', '9222388822', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -176,7 +180,7 @@ CREATE TABLE `kompetensi` (
   `id_kompetensi` int(11) NOT NULL,
   `id_jobseeker` int(11) DEFAULT NULL,
   `id_kategori_soal` int(11) NOT NULL,
-  `skor` varchar(5) DEFAULT NULL,
+  `skor` varchar(10) DEFAULT NULL,
   `id_kebutuhan_skill` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -193,7 +197,9 @@ INSERT INTO `kompetensi` (`id_kompetensi`, `id_jobseeker`, `id_kategori_soal`, `
 (6, NULL, 3, NULL, 2),
 (7, NULL, 3, NULL, 3),
 (11, 2, 3, '100', NULL),
-(13, 4, 1, '50.00', NULL);
+(13, 4, 1, '50.00', NULL),
+(14, 4, 3, '83.00', NULL),
+(16, 2, 1, '50.00', NULL);
 
 -- --------------------------------------------------------
 
@@ -265,9 +271,9 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2020_02_05_041218_add_email_password_jobseeker_table', 1);
+(3, '2020_02_05_041218_add_email_password_jobseeker_table', 1),
+(4, '2014_10_12_000000_create_users_table', 2);
 
 -- --------------------------------------------------------
 
@@ -297,18 +303,6 @@ CREATE TABLE `penyaluran` (
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `penyaluran`
---
-
-INSERT INTO `penyaluran` (`id_penyaluran`, `id_jobseeker`, `id_perusahaan`, `id_loker`, `status_penyaluran`, `kebutuhan_skill`, `created_at`, `updated_at`) VALUES
-(6, 2, 1, 1, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
-(7, 2, 1, 2, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
-(8, 2, 2, 3, 'Dikirim', 'React Native', '2020-02-11 00:46:35', '2020-02-11 00:46:35'),
-(9, 1, 1, 1, 'Dikirim', 'Laravel', '2020-02-09 00:47:07', '2020-02-11 00:47:07'),
-(10, 1, 1, 1, 'Dikirim', 'Laravel', '2020-02-14 06:16:50', '2020-02-14 06:16:50'),
-(11, 1, 1, 1, 'Dikirim', 'Code Igniter', '2020-02-14 06:16:50', '2020-02-14 06:16:50');
 
 -- --------------------------------------------------------
 
@@ -360,6 +354,23 @@ INSERT INTO `soal` (`id_soal`, `soal`, `id_kategori_soal`) VALUES
 (19, 'FLutter termasuk framework berbahasa?', 4),
 (20, 'Laravel Versi terbaru adalah', 1),
 (21, 'MVC adalah ?', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -452,6 +463,13 @@ ALTER TABLE `soal`
   ADD KEY `soal_join` (`id_kategori_soal`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -459,7 +477,7 @@ ALTER TABLE `soal`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cv_jobseeker`
@@ -477,7 +495,7 @@ ALTER TABLE `jawaban`
 -- AUTO_INCREMENT for table `jobseeker`
 --
 ALTER TABLE `jobseeker`
-  MODIFY `id_jobseeker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_jobseeker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `kategori_soal`
@@ -489,7 +507,7 @@ ALTER TABLE `kategori_soal`
 -- AUTO_INCREMENT for table `kompetensi`
 --
 ALTER TABLE `kompetensi`
-  MODIFY `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `kunci_jawaban`
@@ -507,13 +525,13 @@ ALTER TABLE `loker`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `penyaluran`
 --
 ALTER TABLE `penyaluran`
-  MODIFY `id_penyaluran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_penyaluran` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `perusahaan`
@@ -526,6 +544,12 @@ ALTER TABLE `perusahaan`
 --
 ALTER TABLE `soal`
   MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
